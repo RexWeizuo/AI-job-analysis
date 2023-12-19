@@ -7,6 +7,10 @@ def clean_location(location):
     location = location.split('·')[0]
     location = location.replace('·', '-')
     location = location.replace('区', '')
+    """
+    第一行是把输入的文本按照'·'分开，分开之后会变成['北京','昌平区','回龙观']，取索引为0的数，也就成了'北京'
+    也就是说，到第二、第三行的时候，传入的数据里已经没有'·'，也没有'区'字
+    """
     return location
 
 # 薪资格式：50-80K·13薪（“薪资面议”，“面议”-->“薪资面议”）（保留“急聘”）
@@ -63,6 +67,9 @@ def convert_update_date(date_str):
         current_year = pd.to_datetime('today').year
         formatted_date = f"{current_year}-{month:02d}-{day:02d}"
         return formatted_date
+        """
+        看起来只去掉了月日情况下的“更新于”，原本就是--格式的字段仍旧会保留“更新于”，最好统一一下，全都不保留
+        """
     else:
         return date_str
 
@@ -71,6 +78,9 @@ def clean_experience(experience):
     if '以内' in experience or '以下' in experience:
         return '1年以下'
     elif '无经验' in experience or '应届生' in experience:
+        """
+        应届生单独拿出来，因为应届生是一个硬性条件（非应届生不能报应届生岗，所以应届生不属于经验不限）
+        """
         return '经验不限'
     else:
         return experience
