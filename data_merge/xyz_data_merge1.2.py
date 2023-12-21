@@ -107,6 +107,10 @@ def detect_encoding(file_path):
 # 企业规模统一：20人以下 --> 0-20人
 def clean_company_size(size):
     # 只有在 size 是字符串时才执行包含 '20人以下' 的检查。这样可以避免对浮点数执行不可迭代的 in 操作。
+    """
+    因为企业规模中有空值nan，nan属于浮点数，所以会出现这样的情况（对浮点数执行不可迭代的 in 操作）
+    建议把nan直接换成字段“无”，方便后续处理
+    """
     if isinstance(size, str) and '20人以下' in size:
         return '0-20人'
     else:
